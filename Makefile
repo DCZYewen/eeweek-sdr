@@ -246,6 +246,8 @@ git-pull:
 sdimg: build/
 	rm -rf $(SDIMGDIR)
 	mkdir $(SDIMGDIR)
+#	rm -rf $(SDIMGDIR)/fw-qspi
+#	mkdir $(SDIMGDIR)/fw-qspi
 	cp build/sdk/fsbl/Release/fsbl.elf 	$(SDIMGDIR)/fsbl.elf  
 	cp build/sdk/system_top/hw/system_top.bit 	$(SDIMGDIR)/system_top.bit
 	cp build/u-boot.elf 			$(SDIMGDIR)/u-boot.elf
@@ -266,3 +268,5 @@ sdimg: build/
 	rm $(SDIMGDIR)/u-boot.elf
 	rm $(SDIMGDIR)/ramdisk.image.gz 
 	rm $(SDIMGDIR)/boot.bif
+#	cp build/pluto.itb $(SDIMGDIR)/fw-qspi
+#	cp build/boot.bin $(SDIMGDIR)/fw-qspi
