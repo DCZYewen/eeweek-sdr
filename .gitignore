@@ -37,3 +37,7 @@
 
 build/
 .Xil
+
+# Added by DCZYewen
+artifacts/
+build_sdimg/
