@@ -144,13 +144,13 @@ move_to_artifacts() {
         error_exit "$SDCARD_ZIP does not exist"
     fi
 
-    if [[ ! -f "$SDCARD_ZIP_FLASH" ]]; then
-        error_exit "$SDCARD_ZIP_FLASH does not exist"
+    if [[ ! -f "$SDCARD_FLASH_ZIP" ]]; then
+        error_exit "$SDCARD_FLASH_ZIP does not exist"
     fi
     
     mv "$FIRMWARE_ZIP" "$ARTIFACTS_DIR/" || error_exit "Failed to move $FIRMWARE_ZIP"
     mv "$SDCARD_ZIP" "$ARTIFACTS_DIR/" || error_exit "Failed to move $SDCARD_ZIP"
-    mv "$SDCARD_ZIP_FLASH" "$SDCARD_ZIP_FLASH/" || error_exit "Failed to move $SDCARD_ZIP_FLASH"
+    mv "$SDCARD_FLASH_ZIP" "$ARTIFACTS_DIR/" || error_exit "Failed to move $SDCARD_FLASH_ZIP"
     
     success_msg "Files moved to $ARTIFACTS_DIR:"
     ls -lh "$ARTIFACTS_DIR/"
