@@ -10,6 +10,7 @@ PLUTO_DFU="./build/pluto.dfu"
 # Output file paths
 FIRMWARE_ZIP="./build/firmware.zip"
 SDCARD_ZIP="./build/firmware_sdcard.zip"
+SDCARD_FLASH_ZIP="./build/firmware_sdcard_flash.zip"
 
 # Artifacts directory
 ARTIFACTS_DIR="./artifacts"
@@ -106,6 +107,30 @@ create_sdcard_zip() {
         ls -lh "$SDCARD_ZIP"
     fi
 }
+# Create firmware_sdcard.zip
+create_sdcard_zip_flash() {
+    info_msg "Creating firmware_sdcard_flash.zip..."
+    
+    local sdimg_dir="./build_sdimg"
+    
+    if [[ ! -d "$sdimg_dir" ]]; then
+        error_exit "$sdimg_dir directory does not exist"
+    fi
+    
+    if [[ -z "$(ls -A "$sdimg_dir" 2>/dev/null)" ]]; then
+        error_exit "$sdimg_dir directory is empty"
+    fi
+    
+    cd "$sdimg_dir" || error_exit "Cannot cd into $sdimg_dir"
+    cp "script/uEnvwithFlashCmd.env" "build_sdimg/uEnv.txt"
+    zip -r "../$SDCARD_FLASH_ZIP" . || error_exit "Failed to create firmware_sdcard__flash.zip"
+    cd - > /dev/null || error_exit "Cannot return to parent directory"
+    
+    if [[ -f "$SDCARD_FLASH_ZIP" ]]; then
+        success_msg "Successfully created $SDCARD_FLASH_ZIP"
+        ls -lh "$SDCARD_FLASH_ZIP"
+    fi
+}
 
 # Move files to artifacts directory
 move_to_artifacts() {
@@ -118,9 +143,14 @@ move_to_artifacts() {
     if [[ ! -f "$SDCARD_ZIP" ]]; then
         error_exit "$SDCARD_ZIP does not exist"
     fi
+
+    if [[ ! -f "$SDCARD_ZIP_FLASH" ]]; then
+        error_exit "$SDCARD_ZIP_FLASH does not exist"
+    fi
     
     mv "$FIRMWARE_ZIP" "$ARTIFACTS_DIR/" || error_exit "Failed to move $FIRMWARE_ZIP"
     mv "$SDCARD_ZIP" "$ARTIFACTS_DIR/" || error_exit "Failed to move $SDCARD_ZIP"
+    mv "$SDCARD_ZIP_FLASH" "$SDCARD_ZIP_FLASH/" || error_exit "Failed to move $SDCARD_ZIP_FLASH"
     
     success_msg "Files moved to $ARTIFACTS_DIR:"
     ls -lh "$ARTIFACTS_DIR/"
@@ -135,6 +165,7 @@ main() {
     
     create_firmware_zip
     create_sdcard_zip
+    create_sdcard_zip_flash
     
     move_to_artifacts
     
