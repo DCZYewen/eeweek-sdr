@@ -196,6 +196,7 @@ clean:
 	rm -f $(notdir $(wildcard build/*))
 	rm -rf build/*
 	rm -rf build_sdimg/*
+	rm -rf artifacts/*
 
 zip-all: $(TARGETS)
 	zip -j build/$(ZIP_ARCHIVE_PREFIX)-fw-$(VERSION).zip $^
