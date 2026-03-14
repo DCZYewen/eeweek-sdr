@@ -15,15 +15,18 @@ Use of this device and firmware is at your own risk. The software is provided "A
 4. High quality internet connection is in need during compilation, especially in buildroot, if you dont know what to do, download binary instead.
 5. Copy the cross compile toolchain out of buildroot for further use, dont use the one comes with Vitis.
 6. During the test procedure, you can bypass the LEAGAL INFO collection, by `export $SKIP_LEAGAL=1` or `make SKIP_LEAGAL=1`.
-7. Using WSL or vmware is totally okay, but a cpu faster than Ryzen 5 5600 or Core i3 12100 or vCPU of at least 4 cores and memory larger than 4GB is recommended.
+7. Using WSL or vmware is totally okay, but a cpu faster than Ryzen 5 5600 or Core i3 12100 or vCPU of at least 6 cores and memory larger than 6GB is recommended.
+8. See git logs of what i altered to fit the eeweeksdr board.
 
 # Hints
+
 1. If you accidentally destructed the out of factory firmware and its bootloader, do as follows:
 ```
 1. Prepare a sdcard with less than 32GB and format it to FAT32.
 2. Download the firmware recovery and copy the file to sdcard root directory.
 3. Start the board in sdcard boot mode, during the uboot procedure press any key to stop autoboot.
-4. In uboot shell, run `run flash_wipe` to erase the QSPI flash, then run `run flash_all` to write the firmware to QSPI again.
+4. In uboot shell, run `run flash_all` to write the firmware to QSPI again.
+5. If above didnot work, run `run flash_wipe` to erase the QSPI flash, then do the step 4 again to make a clean flash.
 ```
 2. If the bootloader is still okay, just press the DFU button during bring up, flash the firmware under dfu like:
 ```
@@ -34,7 +37,10 @@ dfu-utils -D uboot-env.dfu -a 3
 3. Flash under Vivado Hardware Manager or Vitis XSCT via JTRG is also supported, use it if you like it.
 4. The firmware is under a tempfs, all changes to file systemd will be discarded except for `/mnt/jffs2`. You can put your custom program and config files to `/mnt/jffs2`, see source code in `buildroot/board/pluto/S98autostart`.
 5. If you wanted to use the SD card as a bulk device other than simulate it as a flash. Edit the buildroot on your own, super easy.
-
+6. If you wanted to run your custom programs on this board, using the cross compiler toolchain on `/home/zihao/eeweek-sdr/buildroot/output/host/opt/ext-toolchain`. Use CMake or xmake or MakeFiles as your favor.
+7. For power issues, only one core is enabled on default, you can enable all cores by `setenv maxcpus 2` on uboot shell or `fw_setenv maxcpus 2`, then restart the board. But in advice, if you dont sure what are you doing leave it as is. If your program is not well designed on multithreading, you can cause kernel panics easily.
+8. You can start without using Vivado or Vitis if you only modificate the kernel and rootfs, leave the system_top.xsa and boot.bin alone.
+9. I removed the CTRL IN/OUT pins on hdl and dts, if your project is using this, sorry about that.
 
 # Usage
 
@@ -57,4 +63,4 @@ make
 make sdimg
 bash collect_artifacts.sh
 ```
-This will produce qspi and sdcard image in artifacts directory.
+This will produce qspi and sdcard and sd flashing image in artifacts directory.
