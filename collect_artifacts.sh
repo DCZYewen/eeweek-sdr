@@ -13,7 +13,7 @@ PLUTO_DFU="./build/pluto.dfu"
 
 FIRMWARE_ZIP="./build/firmware.zip"
 SDCARD_ZIP="./build/firmware_sdcard.zip"
-SDCARD_FLASH_ZIP="./build/firmware_sdcard_flash.zip"
+SDCARD_FLASH_ZIP="./build/firmware_sdcard_flash.tar.gz"
 
 SDIMG_DIR="./build_sdimg"
 FLASH_ENV="./scripts/uEnvwithFlashCmd.env"
@@ -125,7 +125,7 @@ create_sdcard_zip() {
 
 create_sdcard_zip_flash() {
 
-    info_msg "Creating firmware_sdcard_flash.zip..."
+    info_msg "Creating firmware_sdcard_flash.tar.gz..."
 
     require_dir "$SDIMG_DIR"
     require_file "$FLASH_ENV"
@@ -140,7 +140,9 @@ create_sdcard_zip_flash() {
 
     rm -f "$SDCARD_FLASH_ZIP"
 
-    (zip -r "$tmpdir/firmware_sdcard_flash.zip" "$tmpdir"  && cp "$tmpdir/../firmware_sdcard_flash.zip" "$SDCARD_FLASH_ZIP")
+    echo "$tmpdir"
+
+    tar -C "$tmpdir" -czf "$SDCARD_FLASH_ZIP" .
 
     rm -rf "$tmpdir"
 
