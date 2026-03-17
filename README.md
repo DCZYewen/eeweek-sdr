@@ -34,7 +34,7 @@ dfu-utils -D pluto.dfu -a 1
 dfu-utils -D boot.dfu -a 0
 dfu-utils -D uboot-env.dfu -a 3
 ```
-3. Flash under Vivado Hardware Manager or Vitis XSCT via JTRG is also supported, use it if you like it.
+3. Flash under Vivado Hardware Manager or Vitis XSCT via JTAG is also supported, use it if you like it.
 4. The firmware is under a tempfs, all changes to file systemd will be discarded except for `/mnt/jffs2`. You can put your custom program and config files to `/mnt/jffs2`, see source code in `buildroot/board/pluto/S98autostart`.
 5. If you wanted to use the SD card as a bulk device other than simulate it as a flash. Edit the buildroot on your own, super easy.
 6. If you wanted to run your custom programs on this board, using the cross compiler toolchain on `/home/zihao/eeweek-sdr/buildroot/output/host/opt/ext-toolchain`. Use CMake or xmake or MakeFiles as your favor.
@@ -55,7 +55,7 @@ If libssl1.0-dev has no installation cadidate, see suggestion #3.
 
 2. Export Vivado to enviornments.
 
-`export VIVADO_SETTINGS=/tools/Xilinx/Vivado/2021.2/settings64.sh`
+`export VIVADO_SETTINGS=/tools/Xilinx/Vivado/2022.2/settings64.sh`
 
 3. Do as follows:
 ```
